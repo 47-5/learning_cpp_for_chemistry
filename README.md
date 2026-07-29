@@ -14,11 +14,12 @@ C++ 基础
 
 ```text
 .
-├── notes/          # C++、CMake、Eigen 与 HF 实现笔记
-├── 01_basic/       # 不依赖第三方库的 C++ 基础示例
-├── 02_eigen/       # Eigen 矩阵与对称本征值问题示例
-├── 03_miniHF/      # miniHF 的代码骨架与分阶段路线
-└── examples/       # 后续独立小实验和输入示例
+├── notes/                  # C++、CMake、Eigen 与 HF 实现笔记
+├── 00_cpp_fundamentals/    # StudyPlan.dev C++ 基础练习
+├── 01_basic/               # 不依赖第三方库的 C++ 基础示例
+├── 02_eigen/               # Eigen 矩阵与对称本征值问题示例
+├── 03_miniHF/              # miniHF 的代码骨架与分阶段路线
+└── examples/               # 后续独立小实验和输入示例
 ```
 
 ## 推荐环境
