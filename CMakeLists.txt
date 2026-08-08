@@ -76,6 +76,9 @@ if(LCC_BUILD_EIGEN_EXAMPLE)
     if(Eigen3_FOUND)
         # 找到 Eigen 后，读取 02_eigen/CMakeLists.txt 并构建该示例。
         add_subdirectory(02_eigen)
+
+        # Project_01 的 Molecule 类型使用 Eigen::Vector3d，因此也在找到 Eigen 后构建。
+        add_subdirectory(ProgrammingProjects/Project_01)
     else()
         # 没找到时只显示提示并跳过示例，不让整个项目配置失败。
         message(STATUS "Eigen3 was not found; skipping 02_eigen")

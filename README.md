@@ -19,6 +19,7 @@ C++ 基础
 ├── 01_basic/               # 不依赖第三方库的 C++ 基础示例
 ├── 02_eigen/               # Eigen 矩阵与对称本征值问题示例
 ├── 03_miniHF/              # miniHF 的代码骨架与分阶段路线
+├── ProgrammingProjects/    # 独立的阶段性编程项目
 └── examples/               # 后续独立小实验和输入示例
 ```
 
@@ -32,6 +33,9 @@ sudo apt install build-essential cmake ninja-build gdb git libeigen3-dev
 ```
 
 在 CLion 中将 Toolchain 设为 WSL，并确认 CMake、C++ Compiler 和 Debugger 均指向 WSL 内的工具。
+
+换电脑时的完整安装、Git/SSH、CLion Profile、构建和故障恢复步骤见
+[`ENVIRONMENT_SETUP.md`](ENVIRONMENT_SETUP.md)。
 
 ## 构建与运行
 
