@@ -19,7 +19,7 @@ C++ 基础
 ├── 01_basic/               # 不依赖第三方库的 C++ 基础示例
 ├── 02_eigen/               # Eigen 矩阵与对称本征值问题示例
 ├── 03_miniHF/              # miniHF 的代码骨架与分阶段路线
-├── ProgrammingProjects/    # 独立的阶段性编程项目
+├── ProgrammingProjects/    # 按语言组织的项目、公共库与共享输入
 └── examples/               # 后续独立小实验和输入示例
 ```
 
@@ -53,6 +53,8 @@ ctest --test-dir build --output-on-failure
 ./build/01_basic/basic_hello
 ./build/02_eigen/eigen_matrix_demo
 ./build/03_miniHF/minihf_placeholder
+./build/ProgrammingProjects/cpp/Project_01/project01 \
+    ProgrammingProjects/resources/Project_01/input/allene.dat
 ```
 
 如果尚未安装 Eigen，CMake 会跳过 `eigen_matrix_demo`，其余示例仍然可以构建。

@@ -3,8 +3,10 @@
 
 #include <array>
 
+namespace chemistry {
+
 // Masses (amu) of the most abundant isotope, indexed by atomic number.
-inline constexpr std::array<double, 119> ATOMIC_MASSES{
+inline constexpr std::array<double, 119> atomic_masses{
     0.0, 1.00782503223, 4.00260325413, 7.0160034366, 9.012183065,
     11.00930536, 12.0, 14.0030740044, 15.9949146196, 18.9984031627,
     19.9924401762, 22.989769282, 23.985041697, 26.98153853, 27.9769265347,
@@ -31,6 +33,8 @@ inline constexpr std::array<double, 119> ATOMIC_MASSES{
     288.19274, 293.20449, 292.20746, 294.21392,
 };
 
-static_assert(ATOMIC_MASSES.size() == 119);
+static_assert(atomic_masses.size() == 119);
+
+} // namespace chemistry
 
 #endif // LEARNING_CPP_FOR_CHEMISTRY_ATOMIC_MASSES_H

@@ -108,12 +108,12 @@ O = 15.9949146196
 =\mathrm{bohr}
 \]
 
-所以 `get_center_of_mass()` 返回的坐标仍是 bohr。
+所以 `RotationalAnalyzer.center_of_mass()` 返回的坐标仍是 bohr。
 
 计算惯量前使用：
 
 ```python
-centered_positions = self.positions - self.get_center_of_mass()
+centered_positions = molecule.positions - analyzer.center_of_mass()
 ```
 
 平移只改变坐标原点，不改变坐标单位。

@@ -15,7 +15,7 @@ Windows
 
 - CMake 3.20 或更高版本；
 - 支持 C++17 的编译器；
-- Eigen 3.3 或更高版本（用于 Eigen 示例和 `Project_01`）；
+- Eigen 3.3 或更高版本（用于 Eigen 示例和 `chemistry_core`）；
 - 推荐使用 Ninja 和 GDB。
 
 构建目录、CLion 本地设置和编译产物都可以重新生成，不需要从旧电脑复制。
@@ -195,7 +195,7 @@ ctest --test-dir build --output-on-failure
 ./build/03_miniHF/minihf_placeholder
 ```
 
-`project01_molecule` 是静态库目标，因此没有可直接运行的同名程序，但它应当在完整构建时成功编译。
+`chemistry_core` 是 Project 1 和 Project 2 共用的静态库目标，因此没有可直接运行的同名程序，但它应当在完整构建时成功编译。
 
 ---
 

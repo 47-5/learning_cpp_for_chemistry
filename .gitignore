@@ -1,5 +1,6 @@
 # CMake build trees
 /build/
+/build-wsl/
 /cmake-build-*/
 /out/
 
@@ -30,3 +31,8 @@ compile_commands.json
 *.log
 .DS_Store
 Thumbs.db
+
+# Python caches
+__pycache__/
+*.py[cod]
+.venv/
