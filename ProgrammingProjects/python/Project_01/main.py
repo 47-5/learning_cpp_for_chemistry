@@ -1,4 +1,3 @@
-import argparse
 from pathlib import Path
 
 from chemistry import (
@@ -8,7 +7,7 @@ from chemistry import (
 )
 
 
-DEFAULT_INPUT = (
+INPUT_FILE = (
     Path(__file__).resolve().parents[2]
     / "resources"
     / "Project_01"
@@ -17,23 +16,8 @@ DEFAULT_INPUT = (
 )
 
 
-def parse_arguments() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description="Project 1 molecular analysis"
-    )
-    parser.add_argument(
-        "input_file",
-        nargs="?",
-        type=Path,
-        default=DEFAULT_INPUT,
-        help="geometry file (default: allene.dat)",
-    )
-    return parser.parse_args()
-
-
-def main() -> None:
-    arguments = parse_arguments()
-    molecule = Molecule.from_file(arguments.input_file)
+def main(input_file: Path = INPUT_FILE) -> None:
+    molecule = Molecule.from_file(input_file)
     geometry = GeometryAnalyzer(molecule)
     rotation = RotationalAnalyzer(molecule)
 

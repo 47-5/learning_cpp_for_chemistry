@@ -4,6 +4,8 @@ add_library(
     src/geometry_analyzer.cpp
     src/molecule.cpp
     src/rotational_analyzer.cpp
+        include/chemistry/vibrational_analysis.h
+    src/vibrational_analysis.cpp
 )
 
 target_include_directories(

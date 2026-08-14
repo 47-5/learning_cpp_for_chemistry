@@ -19,10 +19,13 @@ Then run:
 ```bash
 cd ProgrammingProjects/python
 python3 -m Project_01.main
-python3 -m Project_02.main \
-    ../resources/Project_02/input/h2o_geom.txt \
-    ../resources/Project_02/input/h2o_hessian.txt
+python3 -m Project_02.main
 ```
+
+The entry points use input-path constants near the top of each `main.py`,
+so they can also be run directly from PyCharm without program arguments.
+Change `INPUT_FILE` in Project 1, or `GEOMETRY_FILE` and `HESSIAN_FILE`
+in Project 2, to select another input.
 
 Both projects import the same domain model and analyzers from
 `chemistry/`. Input data and theory notes are shared with the C++
