@@ -20,13 +20,18 @@ Then run:
 cd ProgrammingProjects/python
 python3 -m Project_01.main
 python3 -m Project_02.main
+python3 -m Project_03.main
 ```
 
 The entry points use input-path constants near the top of each `main.py`,
 so they can also be run directly from PyCharm without program arguments.
-Change `INPUT_FILE` in Project 1, or `GEOMETRY_FILE` and `HESSIAN_FILE`
-in Project 2, to select another input.
+Change `INPUT_FILE` in Project 1, `GEOMETRY_FILE` and `HESSIAN_FILE`
+in Project 2, or `INPUT_DIRECTORY` in Project 3 to select another input.
 
-Both projects import the same domain model and analyzers from
+The projects import the same domain model and analyzers from
 `chemistry/`. Input data and theory notes are shared with the C++
 implementations through `../resources/`.
+
+Project 3 contains a working teaching implementation of closed-shell RHF.
+Its entry point prints the full SCF history and the converged energy, while
+the reusable numerical code lives in `chemistry/electronic_structure/`.

@@ -12,10 +12,12 @@ ProgrammingProjects/
 ├── python/
 │   ├── chemistry/          # Reusable Python package
 │   ├── Project_01/         # Python Project 1 entry point
-│   └── Project_02/         # Python Project 2 entry point
+│   ├── Project_02/         # Python Project 2 entry point
+│   └── Project_03/         # Python RHF/SCF scaffold
 └── resources/
     ├── Project_01/         # Project 1 inputs and notes
-    └── Project_02/         # Project 2 inputs and notes
+    ├── Project_02/         # Project 2 inputs and notes
+    └── Project_03/         # Project 3 AO integrals and theory
 ```
 
 ## Responsibility boundaries
