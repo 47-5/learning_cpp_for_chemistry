@@ -56,44 +56,129 @@ Eigen::Index RHFCalculator::occupied_orbitals() const noexcept
 
 RHFResult RHFCalculator::run() const
 {
-    throw std::logic_error(
-        "TODO 6: assemble the RHF SCF loop");
+    bool converged = false;
+
+    Eigen::MatrixXd X = build_orthogonalizer();
+    Eigen::MatrixXd F = integrals_.core_hamiltonian();
+    RoothaanSolution roothaan_solution = solve_roothaan(F, X);
+    Eigen::MatrixXd D = build_density(roothaan_solution.coefficients);
+
+    F = build_fock(D);
+    double EE = electronic_energy(D, F);
+    double E = EE + integrals_.nuclear_repulsion();
+    std::vector<SCFIteration> history;
+    history.push_back(SCFIteration{0, EE, E, 0.0, 0.0, D});
+
+    for (int run_index = 1; run_index < options_.max_iterations + 1; ++run_index ) {
+
+        RoothaanSolution new_roothaan_solution = solve_roothaan(F, X);
+        Eigen::MatrixXd new_D = build_density(new_roothaan_solution.coefficients);
+        Eigen::MatrixXd new_F = build_fock(new_D);
+        double new_EE = electronic_energy(new_D, new_F);
+        double new_E = new_EE + integrals_.nuclear_repulsion();
+
+        const double E_change = new_E - E;
+        const double D_change = density_change(new_D, D);
+        history.push_back(SCFIteration{run_index, new_EE, new_E,
+            E_change, D_change, new_D});
+
+        // 将新一轮结果提升为当前状态
+        roothaan_solution = std::move(new_roothaan_solution);
+        D = std::move(new_D);
+        F = std::move(new_F);
+        EE = std::move(new_EE);
+        E = std::move(new_E);
+
+        // 判断收敛
+        if ((abs(E_change) < options_.energy_tolerance) && (abs(D_change) < options_.density_tolerance)) {
+            converged = true;
+            break;
+        }
+    }
+    return RHFResult{converged, EE, E,
+        roothaan_solution.orbital_energies, roothaan_solution.coefficients,
+        D, F, history};
 }
 
 Eigen::MatrixXd RHFCalculator::build_orthogonalizer() const
 {
-    throw std::logic_error(
-        "TODO 1: diagonalize S and construct S^(-1/2)");
+    const Eigen::MatrixXd S = integrals_.overlap();
+    Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> solver(S);
+    if (solver.info() != Eigen::Success) {
+        throw std::runtime_error(
+            "Failed to diagonalize overlap"
+        );
+    }
+    const Eigen::MatrixXd U = solver.eigenvectors();
+    const Eigen::VectorXd eigenvalues = solver.eigenvalues();
+
+    if (
+    (eigenvalues.array() <= options_.overlap_eigenvalue_tolerance).any()) {
+        throw std::runtime_error(
+            "Overlap matrix is singular or "
+            "nearly linearly dependent"
+        );
+    }
+
+    const Eigen::VectorXd inverse_sqrt_eigenvalues = eigenvalues.array().sqrt().inverse();
+    const Eigen::MatrixXd inverse_sqrt_s = inverse_sqrt_eigenvalues.asDiagonal();
+
+    const Eigen::MatrixXd X = U * inverse_sqrt_s * U.transpose();
+    return X;
 }
 
 RoothaanSolution RHFCalculator::solve_roothaan(
-    const Eigen::MatrixXd& /*fock*/,
-    const Eigen::MatrixXd& /*orthogonalizer*/) const
+    const Eigen::MatrixXd& fock,
+    const Eigen::MatrixXd& orthogonalizer) const
 {
-    throw std::logic_error(
-        "TODO 2: solve the transformed Fock eigenproblem");
+    Eigen::MatrixXd transformed_F = orthogonalizer.transpose() * fock * orthogonalizer;
+    Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> solver(transformed_F);
+
+    Eigen::MatrixXd C = orthogonalizer * solver.eigenvectors();
+    return RoothaanSolution{solver.eigenvalues(), C};
 }
 
 Eigen::MatrixXd RHFCalculator::build_density(
-    const Eigen::MatrixXd& /*coefficients*/) const
+    const Eigen::MatrixXd& coefficients) const
 {
-    throw std::logic_error(
-        "TODO 3: form D from occupied MO columns without factor 2");
+    const Eigen::MatrixXd occupied_coefficients = coefficients.leftCols(occupied_orbitals_);
+    const Eigen::MatrixXd D = occupied_coefficients * occupied_coefficients.transpose();
+    return D;
 }
 
 Eigen::MatrixXd RHFCalculator::build_fock(
-    const Eigen::MatrixXd& /*density*/) const
+    const Eigen::MatrixXd& density) const
 {
-    throw std::logic_error(
-        "TODO 4: contract D with Coulomb and exchange ERIs");
+    const Eigen::Index basis_size = integrals_.basis_size();
+    if (density.rows() != basis_size || density.cols() != basis_size) {
+        throw std::invalid_argument("Density matrix has the wrong shape");
+    }
+
+    Eigen::MatrixXd F = integrals_.core_hamiltonian();
+    for (Eigen::Index mu = 0; mu < basis_size; ++mu) {
+        for (Eigen::Index nu = 0; nu < basis_size; ++nu) {
+            double two_electron_contribution = 0.0;
+
+            for (Eigen::Index lambda = 0; lambda < basis_size; ++lambda) {
+                for (Eigen::Index sigma = 0; sigma < basis_size; ++sigma) {
+                    const double coulomb = integrals_.eri(mu, nu, lambda, sigma);
+                    const double exchange = integrals_.eri(mu, lambda, nu, sigma);
+                    two_electron_contribution += density(lambda, sigma) * (2 * coulomb - exchange);
+                }
+            }
+            F(mu, nu) += two_electron_contribution;
+        }
+    }
+    return F;
 }
 
 double RHFCalculator::electronic_energy(
-    const Eigen::MatrixXd& /*density*/,
-    const Eigen::MatrixXd& /*fock*/) const
+    const Eigen::MatrixXd& density,
+    const Eigen::MatrixXd& fock) const
 {
-    throw std::logic_error(
-        "TODO 5: evaluate sum D * (H_core + F)");
+    //     "evaluate sum D * (H_core + F)");
+    const double ee = density.cwiseProduct(integrals_.core_hamiltonian() + fock).sum();
+    return ee;
 }
 
 double RHFCalculator::density_change(

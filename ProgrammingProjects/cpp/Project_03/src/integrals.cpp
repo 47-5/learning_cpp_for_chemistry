@@ -146,11 +146,9 @@ std::size_t flat_eri_index(
 {
     const std::size_t size = static_cast<std::size_t>(basis_size);
     return (((static_cast<std::size_t>(mu) * size
-              + static_cast<std::size_t>(nu))
-             * size
-             + static_cast<std::size_t>(lambda))
-            * size
-            + static_cast<std::size_t>(sigma));
+              + static_cast<std::size_t>(nu)) * size
+              + static_cast<std::size_t>(lambda)) * size
+              + static_cast<std::size_t>(sigma));
 }
 
 std::vector<double> read_eri(
